@@ -52,37 +52,61 @@ function classifyParticipant(firstName, lastName, course) {
         return 'Team';
     }
     
-    // Rule 2: Phrase check (3 or more words)
-    const words = fullName.trim().split(/\s+/).filter(w => w.length > 0);
-    if (words.length >= 3) {
-        return 'Team';
-    }
-    
-    // Heuristic lists for Men and Women names
+    // Heuristic lists for Men and Women names (generalized based on common US names)
     const womenNames = new Set([
         'sarah', 'addie', 'ruth', 'debora', 'ellyn', 'linda', 'sofia', 'rebecca', 
         'carolyn', 'michelle', 'sweet', 'tamra', 'eeva', 'dela', 'kacie', 'jen',
-        'jane', 'mary', 'elizabeth', 'jennifer', 'maria', 'susan', 'margaret', 
-        'dorothy', 'lisa', 'karen', 'helen', 'sandra', 'donna', 'carol', 'sharon', 
-        'laura', 'kimberly', 'deborah', 'jessica', 'shirley', 'cynthia', 'angela', 
-        'melissa', 'brenda', 'amy', 'anna'
+        'mary', 'patricia', 'jennifer', 'elizabeth', 'barbara', 'susan', 'jessica', 
+        'karen', 'lisa', 'nancy', 'betty', 'sandra', 'margaret', 'ashley', 'kimberly', 
+        'donna', 'emily', 'carol', 'amanda', 'melissa', 'deborah', 'stephanie', 
+        'sharon', 'laura', 'cynthia', 'kathleen', 'amy', 'angela', 'helen', 'anna', 
+        'brenda', 'pamela', 'nicole', 'samantha', 'katherine', 'emma', 'christine', 
+        'catherine', 'debra', 'rachel', 'janet', 'virginia', 'maria', 'heather', 
+        'diane', 'julie', 'joyce', 'victoria', 'olivia', 'kelly', 'christina', 
+        'lauren', 'joan', 'evelyn', 'judith', 'megan', 'cheryl', 'andrea', 'hannah', 
+        'martha', 'jacqueline', 'frances', 'gloria', 'ann', 'teresa', 'kathryn', 
+        'sara', 'janice', 'jean', 'alice', 'madison', 'doris', 'abigail', 'julia', 
+        'judy', 'grace', 'denise', 'amber', 'marilyn', 'beverly', 'danielle', 
+        'theresa', 'sophia', 'diana', 'jane', 'lori', 'mildred', 'sally', 'rose', 
+        'anne', 'charlotte', 'tracey', 'tammy', 'kathy', 'clara', 'esther', 'flora', 
+        'maude', 'florence', 'mabel', 'ida', 'louise', 'hazel', 'annie', 'lillian', 
+        'gladys', 'ethel', 'edna', 'pearl', 'ruby', 'goldie', 'bertha', 'minnie', 
+        'ellie'
     ]);
     
     const menNames = new Set([
         'bjorn', 'oscar', 'steven', 'frank', 'simon', 'ivan', 'warner', 'steve', 
         'bill', 'rowan', 'todd', 'mike', 'paul', 'mark', 'eli', 'michael', 'scott', 
-        'cory', 'ian', 'alex', 'dorn', 'max', 'john', 'robert', 'james', 'william', 
-        'charles', 'thomas', 'walter', 'joseph', 'arthur', 'henry', 'george', 
-        'edward', 'richard', 'donald', 'roy', 'fred', 'albert', 'harold', 'harry', 
-        'clarence'
+        'cory', 'ian', 'alex', 'dorn', 'max', 'james', 'john', 'robert', 'william', 
+        'david', 'richard', 'joseph', 'thomas', 'charles', 'christopher', 'daniel', 
+        'matthew', 'anthony', 'donald', 'andrew', 'joshua', 'kenneth', 'kevin', 
+        'brian', 'george', 'edward', 'ronald', 'timothy', 'jason', 'jeffrey', 'ryan', 
+        'jacob', 'gary', 'nicholas', 'eric', 'jonathan', 'stephen', 'larry', 'justin', 
+        'brandon', 'benjamin', 'gregory', 'samuel', 'raymond', 'patrick', 'alexander', 
+        'jack', 'dennis', 'jerry', 'tyler', 'aaron', 'jose', 'henry', 'douglas', 
+        'peter', 'walter', 'harold', 'harrison', 'kyle', 'carl', 'arthur', 'gerald', 
+        'roger', 'keith', 'jeremy', 'terry', 'lawrence', 'sean', 'christian', 'albert', 
+        'joe', 'ethan', 'billy', 'bryan', 'bruce', 'jordan', 'ralph', 'roy', 'alan', 
+        'wayne', 'eugene', 'juan', 'gabriel', 'louis', 'russell', 'randy', 'vincent', 
+        'philip', 'bobby', 'johnny', 'marcus', 'harry', 'sam', 'ben', 'owen', 'leo', 
+        'oliver', 'noah', 'liam', 'lucas', 'mason', 'logan', 'ezra', 'levi', 'wyatt', 
+        'carter', 'hudson', 'luke', 'hunter', 'cooper', 'miles'
     ]);
     
+    const words = fullName.trim().split(/\s+/).filter(w => w.length > 0);
     const firstWord = words[0] ? words[0].toLowerCase() : '';
+    
+    // Rule 2: If the first word matches a known gender name, classify immediately
     if (womenNames.has(firstWord)) {
         return 'Women';
     }
     if (menNames.has(firstWord)) {
         return 'Men';
+    }
+    
+    // Rule 3: Phrase check (3 or more words) if name was not recognized in databases
+    if (words.length >= 3) {
+        return 'Team';
     }
     
     // Default fallback
