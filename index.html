@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O-Alaska Results Formatter</title>
+    <meta name="description" content="A premium web tool for orienteering meet directors to import, clean, sort, and export results CSV files.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="container">
+        <header class="app-header">
+            <div class="logo-area">
+                <i data-lucide="compass" class="logo-icon"></i>
+                <div class="brand">
+                    <h1>O-Alaska</h1>
+                    <span class="sub-brand">Results Formatter</span>
+                </div>
+            </div>
+            <p class="description">
+                Upload a semicolon-delimited results CSV, adjust classifications on-screen, and download the edited CSV file in standard sorted format.
+            </p>
+        </header>
+
+        <main class="app-main">
+            <!-- Upload Panel -->
+            <section class="card upload-section" id="upload-card">
+                <div class="dropzone" id="dropzone">
+                    <input type="file" id="file-input" accept=".csv" class="file-input">
+                    <div class="dropzone-content">
+                        <div class="icon-circle">
+                            <i data-lucide="upload-cloud" class="upload-icon"></i>
+                        </div>
+                        <h3>Drag & drop your CSV file here</h3>
+                        <p>or <span class="browse-text">browse files</span></p>
+                        <span class="file-limit">Supports semicolon-delimited CSV files</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Table Editor Panel (Hidden until file loaded) -->
+            <section class="card editor-section hidden" id="editor-card">
+                <div class="editor-header">
+                    <div class="editor-title-area">
+                        <i data-lucide="edit-3" class="section-icon"></i>
+                        <h2>Review & Edit Results</h2>
+                    </div>
+                    <div class="editor-actions">
+                        <button class="btn btn-secondary" id="reset-btn">
+                            <i data-lucide="rotate-ccw"></i> Reset
+                        </button>
+                        <button class="btn btn-primary" id="download-btn">
+                            <i data-lucide="download"></i> Download CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Competitors</span>
+                        <span class="stat-value" id="stat-total">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Teams</span>
+                        <span class="stat-value" id="stat-teams">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Men</span>
+                        <span class="stat-value" id="stat-men">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Women</span>
+                        <span class="stat-value" id="stat-women">0</span>
+                    </div>
+                </div>
+
+                <!-- Info message about changes -->
+                <div class="info-banner">
+                    <i data-lucide="info" class="info-icon"></i>
+                    <p>Edit Course, Name, Time, or Position directly in the cells. Use the dropdowns to override gender/class. When you download, the rows will be automatically sorted and renumbered according to standard rules.</p>
+                </div>
+
+                <div class="table-container">
+                    <table class="results-table" id="results-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%">Course</th>
+                                <th style="width: 15%">Class</th>
+                                <th style="width: 15%">Position</th>
+                                <th style="width: 35%">Name</th>
+                                <th style="width: 15%">Time</th>
+                                <th style="width: 5%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Dynamic rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>Built for Orienteering meet directors. Run client-side. No data is sent to a server.</p>
+        </footer>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
