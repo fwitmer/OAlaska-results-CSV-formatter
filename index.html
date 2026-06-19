@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arctic Orienteering Club Results Formatter</title>
-    <meta name="description" content="A premium web tool for orienteering meet directors to import, clean, sort, and export results CSV files.">
+    <meta name="description"
+        content="A premium web tool for orienteering meet directors to import, clean, sort, and export results CSV files.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- CSS Stylesheet -->
     <link rel="stylesheet" href="styles.css">
     <!-- Lucide Icons -->
@@ -16,6 +19,7 @@
     <!-- PapaParse for CSV parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
+
 <body>
     <div class="glow-bg"></div>
     <div class="container">
@@ -28,7 +32,9 @@
                 </div>
             </div>
             <p class="description">
-                Upload a semicolon-delimited results CSV, adjust classifications on-screen, and download the edited CSV file in standard sorted format.
+                1) Upload the SportIdent semicolon-delimited results CSV<br>
+                2) Adjust 'Class' categories as needed<br>
+                3) Download the edited CSV file for publishing on the AOC website
             </p>
         </header>
 
@@ -43,7 +49,7 @@
                         </div>
                         <h3>Drag & drop your CSV file here</h3>
                         <p>or <span class="browse-text">browse files</span></p>
-                        <span class="file-limit">Supports semicolon-delimited CSV files</span>
+                        <span class="file-limit">Expects the semicolon-delimited results CSV file from SportIdent</span>
                     </div>
                 </div>
             </section>
@@ -87,7 +93,9 @@
                 <!-- Info message about changes -->
                 <div class="info-banner">
                     <i data-lucide="info" class="info-icon"></i>
-                    <p>Edit Course, Name, Time, or Position directly in the cells. Use the dropdowns to override gender/class. When you download, the rows will be automatically sorted and renumbered according to standard rules.</p>
+                    <p>Edit Course, Name, Time, or Position directly in the cells. Use the dropdowns to override
+                        gender/class. When you download, the rows will be automatically sorted and renumbered according
+                        to standard rules.</p>
                 </div>
 
                 <div class="table-container">
@@ -111,11 +119,13 @@
         </main>
 
         <footer class="app-footer">
-            <p>Built for Orienteering meet directors. Run client-side. No data is sent to a server.</p>
+            <p>Built for Arctic Orienteering Club meet directors. App is run on the local client, with no data sent to a
+                server.</p>
         </footer>
     </div>
 
     <!-- Application Script -->
     <script src="app.js"></script>
 </body>
+
 </html>
