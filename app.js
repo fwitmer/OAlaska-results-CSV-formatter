@@ -55,8 +55,9 @@ function classifyParticipant(firstName, lastName, course) {
 
     // Heuristic lists for Men and Women names (generalized based on common US names)
     const womenNames = new Set([
-        'sarah', 'addie', 'ruth', 'debora', 'ellyn', 'linda', 'sofia', 'rebecca',
+        'sarah', 'addie', 'ruth', 'debora', 'ellyn', 'linda', 'sofia', 'rebecca', 
         'carolyn', 'michelle', 'sweet', 'tamra', 'eeva', 'dela', 'kacie', 'jen',
+        'oriana', 'kat', 'angelica',
         'mary', 'patricia', 'jennifer', 'elizabeth', 'barbara', 'susan', 'jessica',
         'karen', 'lisa', 'nancy', 'betty', 'sandra', 'margaret', 'ashley', 'kimberly',
         'donna', 'emily', 'carol', 'amanda', 'melissa', 'deborah', 'stephanie',
@@ -73,28 +74,29 @@ function classifyParticipant(firstName, lastName, course) {
         'maude', 'florence', 'mabel', 'ida', 'louise', 'hazel', 'annie', 'lillian',
         'gladys', 'ethel', 'edna', 'pearl', 'ruby', 'goldie', 'bertha', 'minnie',
         'ellie', 'brittany', 'lindsey', 'jamie', 'abby', 'michelle', 'molly', 'amy',
-        'catherine', 'shelly', 'chloe', 'megan', 'debra', 'brenda', 'susan'
+        'catherine', 'shelly', 'chloe', 'megan', 'debra', 'brenda', 'susan', 'kat', 'oriana'
     ]);
 
     const menNames = new Set([
-        'bjorn', 'oscar', 'steven', 'frank', 'simon', 'ivan', 'warner', 'steve',
-        'bill', 'rowan', 'todd', 'mike', 'paul', 'mark', 'eli', 'michael', 'scott',
-        'cory', 'ian', 'alex', 'dorn', 'max', 'james', 'john', 'robert', 'william',
-        'david', 'richard', 'joseph', 'thomas', 'charles', 'christopher', 'daniel',
-        'matthew', 'anthony', 'donald', 'andrew', 'joshua', 'kenneth', 'kevin',
-        'brian', 'george', 'edward', 'ronald', 'timothy', 'jason', 'jeffrey', 'ryan',
-        'jacob', 'gary', 'nicholas', 'eric', 'jonathan', 'stephen', 'larry', 'justin',
-        'brandon', 'benjamin', 'gregory', 'samuel', 'raymond', 'patrick', 'alexander',
-        'jack', 'dennis', 'jerry', 'tyler', 'aaron', 'jose', 'henry', 'douglas',
-        'peter', 'walter', 'harold', 'harrison', 'kyle', 'carl', 'arthur', 'gerald',
-        'roger', 'keith', 'jeremy', 'terry', 'lawrence', 'sean', 'christian', 'albert',
-        'joe', 'ethan', 'billy', 'bryan', 'bruce', 'jordan', 'ralph', 'roy', 'alan',
-        'wayne', 'eugene', 'juan', 'gabriel', 'louis', 'russell', 'randy', 'vincent',
-        'philip', 'bobby', 'johnny', 'marcus', 'harry', 'sam', 'ben', 'owen', 'leo',
-        'oliver', 'noah', 'liam', 'lucas', 'mason', 'logan', 'ezra', 'levi', 'wyatt',
-        'carter', 'hudson', 'luke', 'hunter', 'cooper', 'miles', 'tim', 'jeff',
-        'colin', 'aaron', 'zach', 'andy', 'doug', 'rick', 'jens', 'ron', 'scott',
-        'bob', 'hank', 'howard', 'larry', 'lee', 'lester', 'linus', 'martin', 'nate',
+        'bjorn', 'oscar', 'steven', 'frank', 'simon', 'ivan', 'warner', 'steve', 
+        'bill', 'rowan', 'todd', 'mike', 'paul', 'mark', 'eli', 'michael', 'scott', 
+        'cory', 'ian', 'alex', 'dorn', 'max', 'james', 'john', 'robert', 'william', 
+        'david', 'richard', 'joseph', 'thomas', 'charles', 'christopher', 'daniel', 
+        'matthew', 'anthony', 'donald', 'andrew', 'joshua', 'kenneth', 'kevin', 
+        'brian', 'george', 'edward', 'ronald', 'timothy', 'jason', 'jeffrey', 'ryan', 
+        'jacob', 'gary', 'nicholas', 'eric', 'jonathan', 'stephen', 'larry', 'justin', 
+        'brandon', 'benjamin', 'gregory', 'samuel', 'raymond', 'patrick', 'alexander', 
+        'jack', 'dennis', 'jerry', 'tyler', 'aaron', 'jose', 'henry', 'douglas', 
+        'peter', 'walter', 'harold', 'harrison', 'kyle', 'carl', 'arthur', 'gerald', 
+        'roger', 'keith', 'jeremy', 'terry', 'lawrence', 'sean', 'christian', 'albert', 
+        'joe', 'ethan', 'billy', 'bryan', 'bruce', 'jordan', 'ralph', 'roy', 'alan', 
+        'wayne', 'eugene', 'juan', 'gabriel', 'louis', 'russell', 'randy', 'vincent', 
+        'philip', 'bobby', 'johnny', 'marcus', 'harry', 'sam', 'ben', 'owen', 'leo', 
+        'oliver', 'noah', 'liam', 'lucas', 'mason', 'logan', 'ezra', 'levi', 'wyatt', 
+        'carter', 'hudson', 'luke', 'hunter', 'cooper', 'miles', 'tim', 'jeff', 
+        'colin', 'zach', 'andy', 'doug', 'rick', 'jens', 'ron', 'bob', 'hank', 
+        'howard', 'lee', 'lester', 'linus', 'martin', 'nate', 'dick',
+        'hatcher', 'dwight', 'kenny', 'allan', 'springer', 'axel', 'glen', 'riley',
         'dick'
     ]);
 
@@ -376,7 +378,7 @@ function exportCSV() {
     let processedRows = resultsData.map(row => ({ ...row }));
 
     // Fixed order lists for sorting
-    const courseOrder = ['White', 'Yellow', 'Orange', 'Green', 'Red'];
+    const courseOrder = ['White', 'Yellow', 'Orange', 'Green', 'Red', 'Short', 'Medium', 'Long', 'Ultra'];
     const classOrder = ['Men', 'Women', 'Team'];
 
     // 2. Sort by Course, Class, and then Time (ascending)
