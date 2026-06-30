@@ -44,58 +44,63 @@ function classifyParticipant(firstName, lastName, course) {
     } else {
         fullName = firstName || lastName || "";
     }
-    
+
     const lower = fullName.toLowerCase();
-    
-    // Rule 1: Contains 'team', 'and', '&'
-    if (lower.includes('team') || /\band\b/.test(lower) || lower.includes('&')) {
+
+    // Rule 1: Contains 'team', 'and', '&', starts with 'the ', or contains group keywords
+    const teamKeywords = /\b(team|society|club|association|squad|crew|duo|trio|group|alliance|union|syndicate|posse)\b/i;
+    if (lower.includes('&') || /\band\b/i.test(lower) || lower.startsWith('the ') || teamKeywords.test(lower)) {
         return 'Team';
     }
-    
+
     // Heuristic lists for Men and Women names (generalized based on common US names)
     const womenNames = new Set([
-        'sarah', 'addie', 'ruth', 'debora', 'ellyn', 'linda', 'sofia', 'rebecca', 
+        'sarah', 'addie', 'ruth', 'debora', 'ellyn', 'linda', 'sofia', 'rebecca',
         'carolyn', 'michelle', 'sweet', 'tamra', 'eeva', 'dela', 'kacie', 'jen',
-        'mary', 'patricia', 'jennifer', 'elizabeth', 'barbara', 'susan', 'jessica', 
-        'karen', 'lisa', 'nancy', 'betty', 'sandra', 'margaret', 'ashley', 'kimberly', 
-        'donna', 'emily', 'carol', 'amanda', 'melissa', 'deborah', 'stephanie', 
-        'sharon', 'laura', 'cynthia', 'kathleen', 'amy', 'angela', 'helen', 'anna', 
-        'brenda', 'pamela', 'nicole', 'samantha', 'katherine', 'emma', 'christine', 
-        'catherine', 'debra', 'rachel', 'janet', 'virginia', 'maria', 'heather', 
-        'diane', 'julie', 'joyce', 'victoria', 'olivia', 'kelly', 'christina', 
-        'lauren', 'joan', 'evelyn', 'judith', 'megan', 'cheryl', 'andrea', 'hannah', 
-        'martha', 'jacqueline', 'frances', 'gloria', 'ann', 'teresa', 'kathryn', 
-        'sara', 'janice', 'jean', 'alice', 'madison', 'doris', 'abigail', 'julia', 
-        'judy', 'grace', 'denise', 'amber', 'marilyn', 'beverly', 'danielle', 
-        'theresa', 'sophia', 'diana', 'jane', 'lori', 'mildred', 'sally', 'rose', 
-        'anne', 'charlotte', 'tracey', 'tammy', 'kathy', 'clara', 'esther', 'flora', 
-        'maude', 'florence', 'mabel', 'ida', 'louise', 'hazel', 'annie', 'lillian', 
-        'gladys', 'ethel', 'edna', 'pearl', 'ruby', 'goldie', 'bertha', 'minnie', 
-        'ellie'
+        'mary', 'patricia', 'jennifer', 'elizabeth', 'barbara', 'susan', 'jessica',
+        'karen', 'lisa', 'nancy', 'betty', 'sandra', 'margaret', 'ashley', 'kimberly',
+        'donna', 'emily', 'carol', 'amanda', 'melissa', 'deborah', 'stephanie',
+        'sharon', 'laura', 'cynthia', 'kathleen', 'amy', 'angela', 'helen', 'anna',
+        'brenda', 'pamela', 'nicole', 'samantha', 'katherine', 'emma', 'christine',
+        'catherine', 'debra', 'rachel', 'janet', 'virginia', 'maria', 'heather',
+        'diane', 'julie', 'joyce', 'victoria', 'olivia', 'kelly', 'christina',
+        'lauren', 'joan', 'evelyn', 'judith', 'megan', 'cheryl', 'andrea', 'hannah',
+        'martha', 'jacqueline', 'frances', 'gloria', 'ann', 'teresa', 'kathryn',
+        'sara', 'janice', 'jean', 'alice', 'madison', 'doris', 'abigail', 'julia',
+        'judy', 'grace', 'denise', 'amber', 'marilyn', 'beverly', 'danielle',
+        'theresa', 'sophia', 'diana', 'jane', 'lori', 'mildred', 'sally', 'rose',
+        'anne', 'charlotte', 'tracey', 'tammy', 'kathy', 'clara', 'esther', 'flora',
+        'maude', 'florence', 'mabel', 'ida', 'louise', 'hazel', 'annie', 'lillian',
+        'gladys', 'ethel', 'edna', 'pearl', 'ruby', 'goldie', 'bertha', 'minnie',
+        'ellie', 'brittany', 'lindsey', 'jamie', 'abby', 'michelle', 'molly', 'amy',
+        'catherine', 'shelly', 'chloe', 'megan', 'debra', 'brenda', 'susan'
     ]);
-    
+
     const menNames = new Set([
-        'bjorn', 'oscar', 'steven', 'frank', 'simon', 'ivan', 'warner', 'steve', 
-        'bill', 'rowan', 'todd', 'mike', 'paul', 'mark', 'eli', 'michael', 'scott', 
-        'cory', 'ian', 'alex', 'dorn', 'max', 'james', 'john', 'robert', 'william', 
-        'david', 'richard', 'joseph', 'thomas', 'charles', 'christopher', 'daniel', 
-        'matthew', 'anthony', 'donald', 'andrew', 'joshua', 'kenneth', 'kevin', 
-        'brian', 'george', 'edward', 'ronald', 'timothy', 'jason', 'jeffrey', 'ryan', 
-        'jacob', 'gary', 'nicholas', 'eric', 'jonathan', 'stephen', 'larry', 'justin', 
-        'brandon', 'benjamin', 'gregory', 'samuel', 'raymond', 'patrick', 'alexander', 
-        'jack', 'dennis', 'jerry', 'tyler', 'aaron', 'jose', 'henry', 'douglas', 
-        'peter', 'walter', 'harold', 'harrison', 'kyle', 'carl', 'arthur', 'gerald', 
-        'roger', 'keith', 'jeremy', 'terry', 'lawrence', 'sean', 'christian', 'albert', 
-        'joe', 'ethan', 'billy', 'bryan', 'bruce', 'jordan', 'ralph', 'roy', 'alan', 
-        'wayne', 'eugene', 'juan', 'gabriel', 'louis', 'russell', 'randy', 'vincent', 
-        'philip', 'bobby', 'johnny', 'marcus', 'harry', 'sam', 'ben', 'owen', 'leo', 
-        'oliver', 'noah', 'liam', 'lucas', 'mason', 'logan', 'ezra', 'levi', 'wyatt', 
-        'carter', 'hudson', 'luke', 'hunter', 'cooper', 'miles'
+        'bjorn', 'oscar', 'steven', 'frank', 'simon', 'ivan', 'warner', 'steve',
+        'bill', 'rowan', 'todd', 'mike', 'paul', 'mark', 'eli', 'michael', 'scott',
+        'cory', 'ian', 'alex', 'dorn', 'max', 'james', 'john', 'robert', 'william',
+        'david', 'richard', 'joseph', 'thomas', 'charles', 'christopher', 'daniel',
+        'matthew', 'anthony', 'donald', 'andrew', 'joshua', 'kenneth', 'kevin',
+        'brian', 'george', 'edward', 'ronald', 'timothy', 'jason', 'jeffrey', 'ryan',
+        'jacob', 'gary', 'nicholas', 'eric', 'jonathan', 'stephen', 'larry', 'justin',
+        'brandon', 'benjamin', 'gregory', 'samuel', 'raymond', 'patrick', 'alexander',
+        'jack', 'dennis', 'jerry', 'tyler', 'aaron', 'jose', 'henry', 'douglas',
+        'peter', 'walter', 'harold', 'harrison', 'kyle', 'carl', 'arthur', 'gerald',
+        'roger', 'keith', 'jeremy', 'terry', 'lawrence', 'sean', 'christian', 'albert',
+        'joe', 'ethan', 'billy', 'bryan', 'bruce', 'jordan', 'ralph', 'roy', 'alan',
+        'wayne', 'eugene', 'juan', 'gabriel', 'louis', 'russell', 'randy', 'vincent',
+        'philip', 'bobby', 'johnny', 'marcus', 'harry', 'sam', 'ben', 'owen', 'leo',
+        'oliver', 'noah', 'liam', 'lucas', 'mason', 'logan', 'ezra', 'levi', 'wyatt',
+        'carter', 'hudson', 'luke', 'hunter', 'cooper', 'miles', 'tim', 'jeff',
+        'colin', 'aaron', 'zach', 'andy', 'doug', 'rick', 'jens', 'ron', 'scott',
+        'bob', 'hank', 'howard', 'larry', 'lee', 'lester', 'linus', 'martin', 'nate',
+        'dick'
     ]);
-    
+
     const words = fullName.trim().split(/\s+/).filter(w => w.length > 0);
     const firstWord = words[0] ? words[0].toLowerCase() : '';
-    
+
     // Rule 2: If the first word matches a known gender name, classify immediately
     if (womenNames.has(firstWord)) {
         return 'Women';
@@ -103,12 +108,17 @@ function classifyParticipant(firstName, lastName, course) {
     if (menNames.has(firstWord)) {
         return 'Men';
     }
-    
+
     // Rule 3: Phrase check (3 or more words) if name was not recognized in databases
     if (words.length >= 3) {
         return 'Team';
     }
-    
+
+    // Rule 4: Plural word heuristic (ends with 's' and has at least 2 words) if first name is unrecognized
+    if (lower.endsWith('s') && words.length >= 2) {
+        return 'Team';
+    }
+
     // Default fallback
     return 'Men';
 }
@@ -155,11 +165,11 @@ function handleFile(file) {
         alert("Please upload a valid .csv file.");
         return;
     }
-    
+
     originalFileName = file.name;
-    
+
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         const text = e.target.result;
         parseCSV(text);
     };
@@ -172,13 +182,13 @@ function parseCSV(csvText) {
         delimiter: ";",
         header: true,
         skipEmptyLines: true,
-        complete: function(results) {
+        complete: function (results) {
             if (results.errors.length > 0) {
                 console.warn("Parsing warnings:", results.errors);
             }
             processRawData(results.data);
         },
-        error: function(err) {
+        error: function (err) {
             alert("Error parsing CSV file: " + err.message);
         }
     });
@@ -204,7 +214,7 @@ function processRawData(data) {
         const resultStatus = getField(['resultstatus', 'resultsstatus']);
 
         // 1. Rename Class to Course (done implicitly by variable names)
-        
+
         // 2. Concatenate names
         let name = "";
         if (firstname && lastname) {
@@ -234,7 +244,7 @@ function processRawData(data) {
 
     renderTable();
     updateStats();
-    
+
     // Switch UI panels
     document.getElementById("upload-card").classList.add("hidden");
     document.getElementById("editor-card").classList.remove("hidden");
@@ -431,7 +441,7 @@ function exportCSV() {
                 csvRows.push(['', '', '', ' ', '']);
             }
         }
-        
+
         csvRows.push([
             row.Course,
             row.Class,
@@ -454,7 +464,7 @@ function exportCSV() {
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    
+
     // Construct new file name
     let newFileName = "edited_results.csv";
     if (originalFileName) {
@@ -463,7 +473,7 @@ function exportCSV() {
             newFileName = "edited_" + originalFileName;
         }
     }
-    
+
     link.setAttribute("href", url);
     link.setAttribute("download", newFileName);
     link.style.visibility = 'hidden';
